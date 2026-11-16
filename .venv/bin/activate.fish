@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/xadmin/zed_workspace/streaming_media_analytics_pipeline/.venv
+set -gx VIRTUAL_ENV /home/xadmin/zed_workspace/stream_an/.venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
