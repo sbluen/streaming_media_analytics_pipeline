@@ -1,10 +1,11 @@
+import csv
 import json
 import os
 import random
 import signal
 import time
-import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 
 from kafka import KafkaProducer
 
@@ -12,6 +13,13 @@ BROKER = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:19092")
 TOPIC = os.getenv("KAFKA_TOPIC", "stream-events")
 INTERVAL_SECONDS = float(os.getenv("EVENT_INTERVAL_SECONDS", "2"))
 PLATFORMS = ("web", "ios", "android", "roku", "fire_tv")
+TRACKS_CSV = Path(__file__).resolve().parent / "royalty_transformation" / "seeds" / "tracks.csv"
+
+with TRACKS_CSV.open(newline="", encoding="utf-8") as tracks_file:
+    TRACK_IDS = [row["track_id"] for row in csv.DictReader(tracks_file) if row.get("track_id")]
+
+if not TRACK_IDS:
+    raise ValueError(f"No track IDs found in {TRACKS_CSV}")
 
 running = True
 
@@ -23,7 +31,7 @@ def stop(_signum, _frame):
 
 def make_event():
     return {
-        "track_id": f"track-{random.randint(1, 1000):04d}",
+        "track_id": random.choice(TRACK_IDS),
         "user_id": f"user-{random.randint(1, 10000):05d}",
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "platform": random.choice(PLATFORMS),
