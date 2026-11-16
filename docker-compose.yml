@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:17-alpine
     restart: unless-stopped
+    #TODO: remove log_statement=all before deployment
     command: ["postgres", "-c", "log_statement=all"]
     environment:
       POSTGRES_DB: streaming_analytics
