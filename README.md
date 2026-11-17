@@ -10,6 +10,10 @@ A local streaming analytics demo built with Redpanda (Kafka-compatible), Postgre
 - **PostgreSQL** stores streaming events in the `streaming_analytics` database.
 - **`royalty_transformation/`** is the dbt project; its seed CSVs are in `royalty_transformation/seeds/`.
 
+### dbt DAG
+
+![dbt DAG](dbt-dag.png)
+
 ## Requirements
 
 - Docker Engine and Docker Compose
@@ -123,8 +127,6 @@ docker compose logs -f postgres
 docker compose logs -f redpanda
 docker compose logs -f consumer
 ```
-
-PostgreSQL is configured with `log_statement=all`, so statements it receives are written to the PostgreSQL container logs. This can generate substantial output and may expose sensitive values in SQL. Use this setting only in suitable development environments.
 
 If dbt reports a connection error, confirm that its host profile uses `localhost:5433` (not `localhost:5432`) when dbt runs on the host. For other common issues, see [troubleshooting.md].
 
